@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controller/feed_controller.dart';
 import 'package:flutter_application_1/view/feedcard.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,21 +15,18 @@ class _nameState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'OurApp',
+          'Instagram',
           style: TextStyle(
             fontWeight: FontWeight.w500,
           ),
         ),
       ),
-      body: ListView(
-        children: [
-          FeedCard(),
-          FeedCard(),
-          FeedCard(),
-          FeedCard(),
-          FeedCard(),
-        ],
-      ),
+      body: ListView.builder(
+        itemCount: FeedController().feeds.length,
+        itemBuilder: (context, index) => FeedCard(
+        feed: FeedController().feeds[index],
+        ),
+        )
     );
   }
 }
