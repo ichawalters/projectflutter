@@ -1,57 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controller/feed_controller.dart';
 import 'package:flutter_application_1/model/feed.dart';
+import 'package:provider/provider.dart';
 
-class FeedCard extends StatelessWidget {
+class FeedCard extends StatefulWidget {
   final Feed feed;
 
   const FeedCard({
-    super.key, 
+    super.key,
     required this.feed,
   });
 
   @override
+  _FeedCardState createState() => _FeedCardState();
+}
+
+class _FeedCardState extends State<FeedCard> {
+  @override
   Widget build(BuildContext context) {
-    const url =
-        'https://images.pexels.com/photos/2168399/pexels-photo-2168399.jpeg?auto=compress&cs=tinysrgb&w=600';
+    final user = widget.feed.user;
     return Card(
       child: Column(
         children: [
-          //header
+          // Header
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(feed.user.avatar),
+              backgroundImage: NetworkImage(user.avatar),
             ),
-            title: Text(feed.user.name),
-            subtitle: Text(feed.user.place),
-            trailing: const Icon(Icons.more_vert),
+            title: Text(user.name),
+            subtitle: Text(user.place),
+            trailing: Icon(Icons.more_vert),
           ),
-          //content
+          // Image
           Image.network(
-            feed.content.image,
+            widget.feed.content.image,
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width * 0.8,
             fit: BoxFit.cover,
           ),
-          //footer
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            child: Row(children: const [
-              Icon(Icons.favorite),
-              SizedBox(width: 10),
-              Icon(Icons.comment),
-              SizedBox(width: 10),
-              Icon(Icons.share),
-              Spacer(
-                flex: 1,
-              ),
-              Padding(padding: const EdgeInsets.only(right: 8.0)),
-              Icon(Icons.bookmark)
-            ]),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: (){             
+                    context.read<FeedController>().like
+                    (widget.feed);                
+                  },
+                  child: Icon(
+                    widget.feed.content.isLike ? Icons.favorite : Icons.favorite_border,
+                    color: widget.feed.content.isLike ? Colors.red : Colors.black,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const Icon(Icons.chat_bubble),
+                const SizedBox(width: 10),
+                const Icon(Icons.send_outlined),
+                const Spacer(),
+                GestureDetector(
+                  onTap:(){             
+                    context.read<FeedController>().bookmark
+                    (widget.feed);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      widget.feed.content.bookmark ? Icons.bookmark : Icons.bookmark_border,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
+          
           ListTile(
-            title: Text(feed.content.likes),
-            subtitle: Text(feed.content.description),
-          )
+            title: Text('${widget.feed.content.likes}'),
+            subtitle: Text(widget.feed.content.description),
+          ),
         ],
       ),
     );
