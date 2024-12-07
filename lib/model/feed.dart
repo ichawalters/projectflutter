@@ -38,3 +38,32 @@ final String place;
     });
 }
 
+// User.fromJson(Map<String, dynamic> json) {
+//       name = json [''];
+//       avatar = json [''];
+//       place = json [''];
+//     }
+
+//      Map<String, dynamic> toJson(){
+//       final Map<String, dynamic> data = <String, dynamic>{};
+//       data ['name'] = name;
+//       data ['avatar'] = avatar;
+//       data ['place'] = place;
+//       return data;
+//     }
+
+//       Feed.fromJson(Map<String, dynamic> json) {
+//       id = json ['id'];
+//       user = json ['user'] !=null? User.fromJson(json['user']);
+//       null; 
+//     }
+
+//      Map<String, dynamic> toJson(){
+//       final Map<String, dynamic> data = <String, dynamic>{};
+//       data ['id'] = id;
+//       if(user!=null) {
+//         data['user'] = user.toJson();
+//       }
+//       return data;
+//     }
+

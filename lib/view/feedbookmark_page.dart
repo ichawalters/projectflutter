@@ -17,7 +17,7 @@ class _nameState extends State<FeedbookmarkPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Instagram',
+          'Bookmark',
           style: TextStyle(
             fontWeight: FontWeight.w500,
           ),
