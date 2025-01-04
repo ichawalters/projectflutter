@@ -1,4 +1,4 @@
-import 'package:flutter_application_1/model/photo.dart';
+import 'package:flutter_application_1/model/data/photo.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main (){
@@ -27,6 +27,6 @@ void main (){
   };
     expect(Photo.fromJson(photo).id, 'fxKvHGDICcQ');
 
-  print('Photo : ${Photo.fromJson(photo).id}');
+  // print('Photo : ${Photo.fromJson(photo).id}');
   });
 }
