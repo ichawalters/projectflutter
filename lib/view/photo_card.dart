@@ -5,7 +5,7 @@ import 'package:flutter_application_1/model/data/photo.dart';
 import 'package:flutter_application_1/view/photo_detail.dart';
 
 class PhotoCard extends StatefulWidget {
-  final Photo photo;
+  final Photos photo;
 
   const PhotoCard({super.key, required this.photo});
 
@@ -20,7 +20,7 @@ class _PhotoCardState extends State<PhotoCard> {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => PhotoDetail(
+            builder: (context) => PhotoDetail (
               photo: widget.photo,
             ),
           ),
@@ -34,7 +34,7 @@ class _PhotoCardState extends State<PhotoCard> {
                 backgroundImage:
                     NetworkImage(widget.photo.user?.profileImage?.small ?? ''),
               ),
-              title: Text(widget.photo.user?.username ?? ''),
+              title: Text(widget.photo.user?.userName ?? ''),
               subtitle: Text(widget.photo.user?.name ?? ''),
               trailing: IconButton(
                 icon: const Icon(Icons.more_vert_rounded),
@@ -105,7 +105,7 @@ class _PhotoCardState extends State<PhotoCard> {
             ),
             ListTile(
               title: Text((widget.photo.likes ?? 0).toString()),
-              subtitle: Text(widget.photo.description ?? ''),
+              subtitle: Text(widget.photo.altDescription ?? ''),
             ),
           ],
         ),

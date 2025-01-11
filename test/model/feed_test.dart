@@ -25,7 +25,7 @@ void main (){
       }
     }
   };
-    expect(Photo.fromJson(photo).id, 'fxKvHGDICcQ');
+    expect(Photos.fromJson(photo).id, 'fxKvHGDICcQ');
 
   // print('Photo : ${Photo.fromJson(photo).id}');
   });

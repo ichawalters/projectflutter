@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/data/photo.dart';
 import 'package:flutter_application_1/model/repository/photo_repository.dart';
-import 'package:flutter_application_1/view/photo_detail.dart';
 
 class PhotoController extends ChangeNotifier {
-  final List<Photo> _photos = [];
-  final List<Photo> _bookmarkPhotos = [];
+  final List<Photos> _photos = [];
+  final List<Photos> _bookmarkPhotos = [];
   bool _isLoading = false;
-  PhotoDetail? _photoDetail;
 
-  List<Photo> get photos => _photos;
-  List<Photo> get bookmarkPhotos => _bookmarkPhotos;
+  List<Photos> get photos => _photos;
+  List<Photos> get bookmarkPhotos => _bookmarkPhotos;
   bool get isLoading => _isLoading;
 
   fetch(int page) async {

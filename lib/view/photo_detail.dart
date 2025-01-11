@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/data/photo.dart';
+import 'package:intl/intl.dart'; // Tambahkan pustaka intl untuk format tanggal
 
-class PhotoDetail  extends StatelessWidget {
-final Photo photo;
+class PhotoDetail extends StatelessWidget {
+  final Photos photo;
 
   const PhotoDetail({Key? key, required this.photo}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    // Ambil dan parsing createdAt
+    String createdAtString = photo.welcome?.createdAt?.toString() ?? '';
+    DateTime createdAt =
+        DateTime.tryParse(createdAtString) ?? DateTime(1970, 1, 1);
+    String formattedDate = DateFormat('MMMM dd, yyyy').format(createdAt);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Photo'),
@@ -15,8 +23,6 @@ final Photo photo;
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Hero animation for the photo
-            
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -24,26 +30,24 @@ final Photo photo;
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ListTile(
-              leading: CircleAvatar(
-                backgroundImage:
-                    NetworkImage(photo.user?.profileImage?.small ?? ''),
-              ),
-              title: Text(photo.user?.username ?? ''),
-              subtitle: Text(photo.user?.name ?? ''),
-              trailing:  const Icon(Icons.more_vert_rounded),
-            ),
-            Hero(
-              tag: photo.id ?? '',
-              child: Image.network(
-                photo.urls?.regular ?? '',
-                fit: BoxFit.cover,
-                height: 500,
-                width: double.infinity,
-              ),
-            ),
-          
+                    leading: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(photo.user?.profileImage?.small ?? ''),
+                    ),
+                    title: Text(photo.user?.userName ?? ''),
+                    subtitle: Text(photo.user?.location ?? ''),
+                    trailing: const Icon(Icons.more_vert_rounded),
+                  ),
+                  Hero(
+                    tag: photo.id ?? '',
+                    child: Image.network(
+                      photo.urls?.regular ?? '',
+                      fit: BoxFit.cover,
+                      height: 500,
+                      width: double.infinity,
+                    ),
+                  ),
                   const SizedBox(height: 8),
-                  // Photo likes
                   Row(
                     children: [
                       const Icon(Icons.favorite, color: Colors.red),
@@ -52,11 +56,18 @@ final Photo photo;
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Text(photo.description ?? '',
+                  Text(
+                    photo.altDescription ?? '',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Menampilkan tanggal dalam format yang mudah dibaca
+                  Text(
+                    'Uploaded on: $formattedDate',
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
@@ -67,4 +78,3 @@ final Photo photo;
     );
   }
 }
-

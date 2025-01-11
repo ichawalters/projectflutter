@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controller/auth_controller.dart';
 import 'package:flutter_application_1/controller/feed_controller.dart';
 import 'package:flutter_application_1/controller/home_controller.dart';
+import 'package:flutter_application_1/model/data/photo.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -12,88 +14,143 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final controller = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
+      controller.fetch();
+    },);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final controller = context.watch<FeedController>();
     final homeController = context.watch<HomeController>();
+    final authController = context.watch<AuthController>();
 
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(30),
+          child: authController.user == null
+          ? _buildLoginWidget(authController)
+          : _buildProfileWidget(controller, homeController, authController),
+        ),
+        );
+  }
+
+  Center _buildLoginWidget(AuthController authController) {
+    return Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Stack(children: [
-                SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                          backgroundColor: Colors.grey.shade200,
-                          backgroundImage: const NetworkImage(
-                              'https://images.pexels.com/photos/27915633/pexels-photo-27915633/free-photo-of-a-woman-with-a-camera.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')),
-                    )),
-                Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: FloatingActionButton.small(
-                        backgroundColor: Colors.teal,
-                        heroTag: const Key('home'),
-                        onPressed: () {},
-                        child: const Icon(Icons.edit, color: Colors.white)))
-              ]),
-              const Padding(
-                  padding: EdgeInsets.only(top: 12.0),
-                  child: Text(
-                    'Agatha',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  )),
               Text(
-                'Photographer',
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Colors.grey.shade500),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              listTile('My Membership', Icons.star_border_outlined),
-              listTile('My Collection', Icons.bookmark_outline,
-                  trailing: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.black,
+                'Please log in to continue!',
+                style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(height: 16,),
+                ElevatedButton(
+                  onPressed: () {
+                    authController.login(User(
+                      id: 'XYZ', 
+                      userName: 'Agatha', 
+                      firstName: 'FirstName', 
+                      lastName: 'lastName', 
+                      twitterUsername: 'twitterUsername', 
+                      profileImage: Profile(
+                        small: 'https://images.pexels.com/photos/27915633/pexels-photo-27915633/free-photo-of-a-woman-with-a-camera.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),  location: '', updatedAt: null));
+                  },
+                  child: Text('login'),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    child: Center(
-                      child: Text(
-                        controller.bookmarkFeeds.length.toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ), onTap: () {
-                homeController.changeIndex(1);
-              }),
-              listTile(
-                'Logout',
-                Icons.logout,
-                color: Colors.red,
-                onTap: () {},
-              ),
+                    padding: const EdgeInsets.symmetric(vertical: 16, 
+                    horizontal: 50)
+                  ),)
             ],
           ),
-        ));
+        );
+  }
+
+  Column _buildProfileWidget(FeedController controller, HomeController homeController, AuthController authController) {
+    return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(children: [
+              SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                        backgroundColor: Colors.grey.shade200,
+                        backgroundImage: const NetworkImage(
+                            'https://images.pexels.com/photos/27915633/pexels-photo-27915633/free-photo-of-a-woman-with-a-camera.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')),
+                  )),
+              Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: FloatingActionButton.small(
+                      backgroundColor: Colors.teal,
+                      heroTag: const Key('home'),
+                      onPressed: () {},
+                      child: const Icon(Icons.edit, color: Colors.white)))
+            ]),
+            const Padding(
+                padding: EdgeInsets.only(top: 12.0),
+                child: Text(
+                  'Agatha',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                )),
+            Text(
+              'Photographer',
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                  color: Colors.grey.shade500),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            listTile('My Membership', Icons.star_border_outlined),
+            listTile('My Collection', Icons.bookmark_outline,
+                trailing: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: Colors.black,
+                  ),
+                  child: Center(
+                    child: Text(
+                      controller.bookmarkFeeds.length.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ), onTap: () {
+              homeController.changeIndex(1);
+            }),
+            listTile(
+              'Logout',
+              Icons.logout,
+              color: Colors.red,
+              onTap: () {authController.logout();},
+            ),
+          ],
+        );
   }
 
   ListTile listTile(
